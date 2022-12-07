@@ -33,4 +33,16 @@ describe("Items API") do
     expect(item[:data][:attributes]).to(have_key(:merchant_id))
     expect(item[:data][:attributes][:merchant_id]).to(be_a(Integer))
   end
+
+  it("can create a new Item(create)") do
+    id = create(:merchant).id
+    item_params = ({name: "Gummy Bear", description: "Sour", unit_price: 1.11, merchant_id: id})
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    post("/api/v1/items",     headers: headers,     params: JSON.generate(    item: item_params))
+    created_item = Item.last
+    expect(response).to(be_successful)
+    expect(created_item.name).to(eq(item_params[:name]))
+  end
 end
