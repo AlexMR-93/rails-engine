@@ -32,8 +32,8 @@ describe("Merchant API") do
 
   it("get all items from a given merchant ID") do
     merchant1 = create(:merchant)
-    item1 = create(:item,     description: "aaaa",     unit_price: 1.2,     merchant_id: merchant1.id)
-    item2 = create(:item,     description: "bbbb",     unit_price: 1.3,     merchant_id: merchant1.id)
+    item1 = create(:item,     description: "chip",     unit_price: 1.2,     merchant_id: merchant1.id)
+    item2 = create(:item,     description: "tea",     unit_price: 1.3,     merchant_id: merchant1.id)
     get("/api/v1/merchants/#{merchant1.id}/items")
     items = JSON.parse(response.body,     symbolize_names: true)
     expect(response).to(be_successful)
