@@ -54,18 +54,4 @@ describe("Merchant API") do
       expect(item[:attributes][:merchant_id]).to(be_a(Integer))
     end
   end
-
-  it("can update an existing book") do
-    id = create(:item).id
-    previous_description = Item.last.description
-    item_params = {description: "Butter"}
-    headers = {"CONTENT_TYPE" => "application/json"}
-
-  # We include this header to make sure that these params are passed as JSON rather than as plain text
-    patch("/api/v1/items/#{id}",     headers: headers,     params: JSON.generate({item: item_params}))
-    item = Item.find_by(    id: id)
-    expect(response).to(be_successful)
-    expect(item.description).to_not(eq(previous_description))
-    expect(item.description).to(eq("Butter"))
-  end
 end

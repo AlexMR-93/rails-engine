@@ -45,4 +45,27 @@ describe("Items API") do
     expect(response).to(be_successful)
     expect(created_item.name).to(eq(item_params[:name]))
   end
+
+  it("can update an existing item") do
+    id = create(:item).id
+    previous_description = Item.last.description
+    item_params = {description: "Butter"}
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+  # We include this header to make sure that these params are passed as JSON rather than as plain text
+    patch("/api/v1/items/#{id}",     headers: headers,     params: JSON.generate({item: item_params}))
+    item = Item.find_by(    id: id)
+    expect(response).to(be_successful)
+    expect(item.description).to_not(eq(previous_description))
+    expect(item.description).to(eq("Butter"))
+  end
+
+  it("can destroy an item") do
+    item = create(:item)
+    expect(Item.count).to(eq(1))
+    delete("/api/v1/items/#{item.id}")
+    expect(response).to(be_successful)
+    expect(Item.count).to(eq(0))
+    expect { Item.find(item.id) }.to(raise_error(ActiveRecord::RecordNotFound))
+  end
 end
