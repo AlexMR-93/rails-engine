@@ -8,4 +8,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get("/api/v1/merchants/:id/items",   to: "items#show")
 end
