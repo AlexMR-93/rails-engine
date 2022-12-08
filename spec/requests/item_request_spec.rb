@@ -47,9 +47,15 @@ describe("Items API") do
   end
 
   it("can update an existing item") do
+    merchant = create(:merchant)
     id = create(:item).id
     previous_description = Item.last.description
-    item_params = {description: "Butter"}
+    item_params = {
+      name: "AAA",
+      description: "Butter",
+      unit_price: 11.11,
+      merchant_id: merchant.id,
+    }
     headers = {"CONTENT_TYPE" => "application/json"}
 
   # We include this header to make sure that these params are passed as JSON rather than as plain text

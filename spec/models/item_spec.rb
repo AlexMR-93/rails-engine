@@ -1,6 +1,11 @@
 require "rails_helper"
+require "date"
 
 
 RSpec.describe(Item, type: :model) do
-  it { should(belong_to(:merchant)) }
+  describe("Relationships") do
+    it { should(belong_to(:merchant)) }
+    it { should(have_many(:invoice_items)) }
+    it { should(have_many(:invoices).through(:invoice_items)) }
+  end
 end
