@@ -74,4 +74,27 @@ describe("Items API") do
     expect(Item.count).to(eq(0))
     expect { Item.find(item.id) }.to(raise_error(ActiveRecord::RecordNotFound))
   end
+
+  it("return the merchant associated with an item") do
+    merchant = create(:merchant)
+    item = create(:item,     merchant_id: merchant.id).id
+    merchant1 = create(:merchant,     name: "Alex")
+    get("/api/v1/items/#{item}/merchant")
+    merch = JSON.parse(response.body,     symbolize_names: true)
+    expect(response).to(be_successful)
+    expect(merch[:data]).to(have_key(:id))
+    expect(merch[:data][:id]).to((be_a(String)))
+    expect(merch[:data][:attributes]).to(have_key(:name))
+    expect(merch[:data][:attributes][:name]).to(be_a(String))
+  end
+
+  it(" find all items which match a search term") do
+    merchant = create(:merchant)
+    item = create(:item,     name: "potatos",     description: "brown potatos",     unit_price: 1.2,     merchant_id: merchant.id)
+    item2 = create(:item,     name: "milosoap",     description: "soap",     unit_price: 1.3,     merchant_id: merchant.id)
+    item3 = create(:item,     name: "smilo",     description: "pasta",     unit_price: 1.5,     merchant_id: merchant.id)
+    item3 = create(:item,     name: "miloops",     description: "cereal",     unit_price: 1.1,     merchant_id: merchant.id)
+    get("/api/v1/items/find_all?name=milo")
+    merch = JSON.parse(response.body,     symbolize_names: true)
+  end
 end
